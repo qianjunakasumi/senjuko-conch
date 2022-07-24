@@ -1,0 +1,36 @@
+name: UpdateVersion
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Change directory
+      run: cd ./actions/stepper/
+
+    - name: Update Version
+      run: go run -v ./...
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: pref👽️ 更新版本
+        branch: pref/version
+        delete-branch: true
+        title: 👽️ 更新版本
+        body: |
+          - [ ] JceStruct 已是最新
+        assignees: qianjunakasumi
+        reviewers: qianjunakasumi
